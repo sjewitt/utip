@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:utip/widgets/person_counter.dart';
+import 'package:utip/widgets/test_widget.dart';
+// import 'package:utip/widgets/PersonCounter.dart';
 
 void main() {
   runApp(const MyApp());
@@ -41,6 +44,7 @@ class _UTipState extends State<UTip> {
   // the stateful props and methods need to be CLASS MEMBERS! NOT local vars inside build! ARGH!!! FFS!!!
 
   int personCount = 0;
+  String now = ""; // underscore sets local scope!!!
 
   void decrementCounter() {
     setState(() {
@@ -52,6 +56,12 @@ class _UTipState extends State<UTip> {
   void incrementCounter() {
     setState(() {
       personCount++; // = personCount - 1;
+    });
+  }
+
+  void setSomething() {
+    setState(() {
+      now = DateTime.now().toIso8601String();
     });
   }
 
@@ -97,6 +107,20 @@ class _UTipState extends State<UTip> {
         mainAxisSize: MainAxisSize.max, // the default
 
         children: [
+          Row(
+            children: [
+              Text("TEST"),
+              Text(now),
+              TestWidget(
+                setsomething: setSomething,
+                // so HERE I am passing in a variable, local to THIS file, that is updated via the
+                // setSomething method passed in to the STATELESS widget. The updated value is displayed
+                //both HERE, AND in the child STATELESS widget... This suggests that the changing
+                //variable isn't actually STATE as far as teh child widget is concerned.
+                result: now,
+              ), // it's just name:val, arguments, NOT an object
+            ],
+          ),
           // Text("body"),
           Container(
             // style the Container: (from vid)
@@ -200,7 +224,7 @@ class _UTipState extends State<UTip> {
                       // prefix: Text("sausage"),
                       // he uses prefixIcon:
                       prefixIcon: Icon(Icons.attach_money), // the dollar sign
-                      labelText: "Show me the money!!",
+                      labelText: "Show me the money",
                     ),
                     keyboardType: const TextInputType.numberWithOptions(
                       decimal:
@@ -222,48 +246,13 @@ class _UTipState extends State<UTip> {
                   ),
 
                   // section #6.13
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment
-                        .spaceBetween, // huh? He talks about this (to `start`) but then removes it?//.spaceBetween also works (and dont need )
-
-                    children: [
-                      Text(
-                        "Split bill by:",
-                        style: theme.textTheme.titleMedium,
-                      ),
-                      // note nested Row()
-                      Row(
-                        // mainAxisAlignment: MainAxisAlignment.end,  // not needed
-                        // the inc/dec controls:
-                        children: [
-                          IconButton(
-                            color: theme.colorScheme.primary,
-                            //NOTE: If the handler is null, then the buttons become disabled. Therefore, add a dummy anon function:
-                            // onPressed: null,
-                            onPressed: decrementCounter,
-                            // () => {
-                            //   // personCount = personCount - 1,
-                            //   // debugPrint("removing")
-                            // },
-                            icon: const Icon(Icons.remove),
-                          ),
-                          // counter
-                          // note use of $ in string to coerce the int to a string
-                          Text(
-                            "$personCount",
-                            style: theme.textTheme.titleMedium,
-                          ),
-                          IconButton(
-                            color: theme.colorScheme.primary,
-                            //NOTE: If the handler is null, then the buttons become disabled. Therefore, add a dummy anon function:
-                            // onPressed: null,
-                            // onPressed: () => personCount++,
-                            onPressed: incrementCounter,
-                            icon: const Icon(Icons.add),
-                          ),
-                        ],
-                      ),
-                    ], // TODO:
+                  // PersonCounter(theme: theme, personCount: personCount),
+                  // #6.15 - and add the function name args
+                  PersonCounter(
+                    theme: theme,
+                    personCount: personCount,
+                    onDecrement: decrementCounter,
+                    onIncrement: incrementCounter,
                   ),
                   Text("BOB!"),
                 ],
