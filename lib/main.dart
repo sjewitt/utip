@@ -66,10 +66,13 @@ class _UTipState extends State<UTip> {
   //  This WORKS to update the slider pos value on dragging - is
   // it the way he does it?
   void setSliderValue(tipPercentage) {
-    setState(() => {});
-    debugPrint("sliding to $tipPercentage...");
-    // this is nice, but a little crude.
-    sliderPos = tipPercentPerPerson = tipPercentage;
+    // = `value` in example
+    setState(() {
+      debugPrint("sliding to $tipPercentage...");
+      // this is nice, but a little crude.
+      sliderPos = tipPercentPerPerson = tipPercentage;
+      // sliderPos = tipPercentage;
+    });
 
     // return val;
     // updatedVal:ValueChanged = 12;

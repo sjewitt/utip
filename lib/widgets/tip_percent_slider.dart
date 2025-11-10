@@ -11,7 +11,12 @@ class TipPercentSlider extends StatelessWidget {
 
   final double sliderPos;
   final double tipPercentPerPerson;
-  Function setSliderValue;
+
+  // Me:
+  // Function setSliderValue;
+  // he does this (note cast):
+  final ValueChanged<double> setSliderValue;
+  // - this ALSO works. So why specifically the above?
 
   @override
   Widget build(BuildContext context) {
@@ -24,10 +29,9 @@ class TipPercentSlider extends StatelessWidget {
       // (based upon the current min/max settings)
       // 6.20 - extract to widget. Comment this out first as errors
       // onChanged: (val) => {setSliderValue(val)}, // MINE - working
-      onChanged: (val) {
-        //to reinstate method call
-        setSliderValue(val);
-      },
+      onChanged: (val) => {setSliderValue(val)},
+
+      // he does this:
 
       //
       //
