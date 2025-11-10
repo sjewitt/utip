@@ -40,6 +40,9 @@ class _UTipState extends State<UTip> {
   double sliderPos = 10;
   double tipPercentPerPerson = 10;
 
+  // todo:
+  double totalCost = 0.0;
+
   double _tipPercentage = 0.0;
   // he may do sometihng to dynamically work out the tics on the slider.
 
@@ -91,13 +94,13 @@ class _UTipState extends State<UTip> {
         mainAxisSize: MainAxisSize.max,
 
         children: [
-          Row(
-            children: [
-              Text("TEST"),
-              Text(now),
-              TestWidget(setsomething: setSomething, result: now),
-            ],
-          ),
+          // Row(
+          //   children: [
+          //     Text("TEST"),
+          //     Text(now),
+          //     TestWidget(setsomething: setSomething, result: now),
+          //   ],
+          // ),
           Container(
             decoration: BoxDecoration(
               color: theme.colorScheme.inversePrimary,
@@ -134,13 +137,16 @@ class _UTipState extends State<UTip> {
                     decoration: const InputDecoration(
                       border: OutlineInputBorder(),
                       prefixIcon: Icon(Icons.attach_money),
-                      labelText: "Show me the money",
+                      labelText: "Total cost:",
                     ),
                     keyboardType: const TextInputType.numberWithOptions(
                       decimal: true,
                     ),
                     onChanged: (String value) {
-                      debugPrint(value);
+                      // call handler here to set the totalCost var
+                      debugPrint(
+                        "VARS: $value, $personCount, $tipPercentPerPerson",
+                      );
                     },
                   ),
                   PersonCounter(
@@ -179,13 +185,16 @@ class _UTipState extends State<UTip> {
                     min: 0,
                     max: 50,
                     value: sliderPos,
-
-                    // mouseCursor: MouseCursor(MouseCursor)
-                    // onChanged: (val) => {debugPrint("$val")}, // setSliderValue,
+                    // note the contextual val here - this is from the Slider widget
+                    // (based upon the current min/max settings)
                     onChanged: (val) => {setSliderValue(val)}, // MINE - working
+                    //
+                    //
                     // he does this:
+                    // a hover label over slider pos
                     label: '${tipPercentPerPerson.round()}%',
-                    divisions: 5,
+                    // points at which the label shows:
+                    divisions: 10,
                     /**
                     min: 0.0,
                     max: 0.5,
