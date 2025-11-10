@@ -1,7 +1,6 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:utip/widgets/person_counter.dart';
+import 'package:utip/widgets/tip_percent_slider.dart';
 import 'package:utip/widgets/test_widget.dart';
 
 void main() {
@@ -180,34 +179,10 @@ class _UTipState extends State<UTip> {
                   // ),
 
                   // tip slider: a Slider widget!
-                  Slider(
-                    /** */
-                    min: 0,
-                    max: 50,
-                    value: sliderPos,
-                    // note the contextual val here - this is from the Slider widget
-                    // (based upon the current min/max settings)
-                    onChanged: (val) => {setSliderValue(val)}, // MINE - working
-                    //
-                    //
-                    // he does this:
-                    // a hover label over slider pos
-                    label: '${tipPercentPerPerson.round()}%',
-                    // points at which the label shows:
-                    divisions: 10,
-                    /**
-                    min: 0.0,
-                    max: 0.5,
-                    value: (_tipPercentage),
-                    // doesn't work yet...
-                    onChanged: (val) {
-                      // so he puts in setState:
-                      setState(() {
-                        _tipPercentage = val;
-                        debugPrint("$_tipPercentage");
-                      });
-                    },
-                     */
+                  TipPercentSlider(
+                    sliderPos: sliderPos,
+                    tipPercentPerPerson: tipPercentPerPerson,
+                    setSliderValue: setSliderValue,
                   ),
 
                   Text("BOB!"),
