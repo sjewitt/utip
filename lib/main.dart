@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:utip/widgets/person_counter.dart';
 import 'package:utip/widgets/test_widget.dart';
@@ -34,6 +36,12 @@ class UTip extends StatefulWidget {
 class _UTipState extends State<UTip> {
   int personCount = 0;
   String now = "";
+  double sliderval = 0.0;
+  double sliderPos = 10;
+  double tipPercentPerPerson = 10;
+
+  double _tipPercentage = 0.0;
+  // he may do sometihng to dynamically work out the tics on the slider.
 
   void decrementCounter() {
     setState(() {
@@ -51,6 +59,19 @@ class _UTipState extends State<UTip> {
     setState(() {
       now = DateTime.now().toIso8601String();
     });
+  }
+
+  //  This WORKS to update the slider pos value on dragging - is
+  // it the way he does it?
+  void setSliderValue(tipPercentage) {
+    setState(() => {});
+    debugPrint("sliding to $tipPercentage...");
+    // this is nice, but a little crude.
+    sliderPos = tipPercentPerPerson = tipPercentage;
+
+    // return val;
+    // updatedVal:ValueChanged = 12;
+    // return ValueChanged.
   }
 
   @override
@@ -128,8 +149,61 @@ class _UTipState extends State<UTip> {
                     onDecrement: decrementCounter,
                     onIncrement: incrementCounter,
                   ),
+
+                  // Tip section
+                  Row(
+                    // force to full width, as per person counter:
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text("Tip", style: theme.textTheme.titleMedium),
+                      // Text("\$20 [placeholder]"),
+                      Text("\$5000}"),
+                    ],
+                  ),
+                  // slider text:
+                  // why does this stay centred?
+                  // This ALSO works
+                  Text("Tip %: ${tipPercentPerPerson.round()}"),
+
+                  // and he does:
+                  Text("Tip: ${(_tipPercentage * 100).round()}%"),
+
+                  // Row(
+                  //   mainAxisAlignment: MainAxisAlignment.center,
+                  //   children: [Text("Tip PP")],
+                  // ),
+
+                  // tip slider: a Slider widget!
+                  Slider(
+                    /** */
+                    min: 0,
+                    max: 50,
+                    value: sliderPos,
+
+                    // mouseCursor: MouseCursor(MouseCursor)
+                    // onChanged: (val) => {debugPrint("$val")}, // setSliderValue,
+                    onChanged: (val) => {setSliderValue(val)}, // MINE - working
+                    // he does this:
+                    label: '${tipPercentPerPerson.round()}%',
+                    divisions: 5,
+                    /**
+                    min: 0.0,
+                    max: 0.5,
+                    value: (_tipPercentage),
+                    // doesn't work yet...
+                    onChanged: (val) {
+                      // so he puts in setState:
+                      setState(() {
+                        _tipPercentage = val;
+                        debugPrint("$_tipPercentage");
+                      });
+                    },
+                     */
+                  ),
+
                   Text("BOB!"),
                 ],
+                // tip percentage
               ),
             ),
           ),
