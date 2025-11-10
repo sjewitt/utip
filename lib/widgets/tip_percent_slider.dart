@@ -14,7 +14,8 @@ class TipPercentSlider extends StatelessWidget {
 
   // Me:
   // Function setSliderValue;
-  // he does this (note cast):
+
+  // he does this (note cast to return type):
   final ValueChanged<double> setSliderValue;
   // - this ALSO works. So why specifically the above?
 

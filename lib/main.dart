@@ -8,8 +8,7 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  // Note this is STATELESS. Therefore the final output is immutable.
-  // This may not be correct...
+  // Note this is STATELESS. Therefore the final output should be immutable. This may not be correct...
   const MyApp({super.key});
 
   @override
@@ -36,14 +35,12 @@ class _UTipState extends State<UTip> {
   int personCount = 0;
   String now = "";
   double sliderval = 0.0;
-  double sliderPos = 10;
-  double tipPercentPerPerson = 10;
+  // initial value of sliderPos (e.g. the proposed tip starting value)
+  double sliderPos = 0;
+  double tipPercentPerPerson = 0;
 
   // todo:
   double totalCost = 0.0;
-
-  double _tipPercentage = 0.0;
-  // he may do sometihng to dynamically work out the tics on the slider.
 
   void decrementCounter() {
     setState(() {
@@ -63,20 +60,14 @@ class _UTipState extends State<UTip> {
     });
   }
 
-  //  This WORKS to update the slider pos value on dragging - is
-  // it the way he does it?
-  void setSliderValue(tipPercentage) {
+  //  This WORKS to update the slider pos value on dragging - is it the way he does it?
+  void setSliderValue(sliderValue) {
     // = `value` in example
     setState(() {
-      debugPrint("sliding to $tipPercentage...");
-      // this is nice, but a little crude.
-      sliderPos = tipPercentPerPerson = tipPercentage;
-      // sliderPos = tipPercentage;
+      debugPrint("setting to sliderValue of: $sliderValue...");
+      // I DO need all three vars - the TPP is also the tooltip!
+      tipPercentPerPerson = sliderPos = sliderValue;
     });
-
-    // return val;
-    // updatedVal:ValueChanged = 12;
-    // return ValueChanged.
   }
 
   @override
@@ -96,13 +87,6 @@ class _UTipState extends State<UTip> {
         mainAxisSize: MainAxisSize.max,
 
         children: [
-          // Row(
-          //   children: [
-          //     Text("TEST"),
-          //     Text(now),
-          //     TestWidget(setsomething: setSomething, result: now),
-          //   ],
-          // ),
           Container(
             decoration: BoxDecoration(
               color: theme.colorScheme.inversePrimary,
@@ -164,17 +148,17 @@ class _UTipState extends State<UTip> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text("Tip", style: theme.textTheme.titleMedium),
-                      // Text("\$20 [placeholder]"),
                       Text("\$5000}"),
                     ],
                   ),
                   // slider text:
                   // why does this stay centred?
                   // This ALSO works
+                  // I have already factored by 1/100 before the value gets here:
                   Text("Tip %: ${tipPercentPerPerson.round()}"),
 
                   // and he does:
-                  Text("Tip: ${(_tipPercentage * 100).round()}%"),
+                  // Text("Tip: ${(_tipPercentage * 100).round()}%"),
 
                   // Row(
                   //   mainAxisAlignment: MainAxisAlignment.center,
@@ -187,10 +171,7 @@ class _UTipState extends State<UTip> {
                     tipPercentPerPerson: tipPercentPerPerson,
                     setSliderValue: setSliderValue,
                   ),
-
-                  Text("BOB!"),
                 ],
-                // tip percentage
               ),
             ),
           ),
