@@ -210,14 +210,30 @@ class _UTipState extends State<UTip> {
                     onIncrement: incrementCounter,
                   ),
 
+                  // make tip percent display consistent:
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text("Tip", style: theme.textTheme.titleMedium),
+                      Text(
+                        "Tip percentage:",
+                        style: theme.textTheme.titleMedium,
+                      ),
+                      Text("${tipPercentPerPerson.round()}%"),
+                    ],
+                  ),
+
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "Total tip amount:",
+                        style: theme.textTheme.titleMedium,
+                      ),
                       Text(finalTipTotalOutput),
                     ],
                   ),
-                  Text("Tip: ${tipPercentPerPerson.round()}%"),
+
+                  // Text("Tip: ${tipPercentPerPerson.round()}%"),
                   TipPercentSlider(
                     sliderPos: sliderPos,
                     tipPercentPerPerson: tipPercentPerPerson,

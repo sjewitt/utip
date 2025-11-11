@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class TipPercentSlider extends StatelessWidget {
-  TipPercentSlider({
+  const TipPercentSlider({
     // removed constant. It's a STATEFUL widget!!
     super.key,
     required this.sliderPos,
