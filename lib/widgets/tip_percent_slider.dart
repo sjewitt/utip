@@ -12,48 +12,22 @@ class TipPercentSlider extends StatelessWidget {
   final double sliderPos;
   final double tipPercentPerPerson;
 
-  // Me:
   // Function setSliderValue;
 
   // he does this (note cast to return type):
+  // This ValueChanged object seems to be quite crucial:
   final ValueChanged<double> setSliderValue;
-  // - this ALSO works. So why specifically the above?
 
   @override
   Widget build(BuildContext context) {
     return Slider(
-      /** */
       min: 0,
       max: 50,
       value: sliderPos,
-      // note the contextual val here - this is from the Slider widget
-      // (based upon the current min/max settings)
-      // 6.20 - extract to widget. Comment this out first as errors
-      // onChanged: (val) => {setSliderValue(val)}, // MINE - working
       onChanged: (val) => {setSliderValue(val)},
 
-      // he does this:
-
-      //
-      //
-      // he does this:
-      // a hover label over slider pos
       label: '${tipPercentPerPerson.round()}%',
-      // points at which the label shows:
-      divisions: 10,
-      /**
-      min: 0.0,
-      max: 0.5,
-      value: (_tipPercentage),
-      // doesn't work yet...
-      onChanged: (val) {
-        // so he puts in setState:
-        setState(() {
-          _tipPercentage = val;
-          debugPrint("$_tipPercentage");
-        });
-      },
-       */
+      divisions: 50, // more granular tip slider
     );
   }
 }

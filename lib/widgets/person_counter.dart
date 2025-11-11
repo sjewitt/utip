@@ -18,7 +18,6 @@ class PersonCounter extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-
       children: [
         Text("Split bill by:", style: theme.textTheme.titleMedium),
         Row(
