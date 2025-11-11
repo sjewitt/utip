@@ -2,6 +2,7 @@
 // import 'dart:ffi';  // contains Double. We actually want `double`
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:utip/widgets/bill_amt_text_field.dart';
 import 'package:utip/widgets/person_counter.dart';
 import 'package:utip/widgets/tip_percent_slider.dart';
@@ -43,19 +44,34 @@ class _UTipState extends State<UTip> {
   double tipPercentPerPerson = 0;
 
   double tipPerPerson = 0;
+  double costPerPerson = 0;
 
   // todo:
   double totalCost = 0.0;
 
+  String finalCostPerPersonOutput = "0.00";
+  String finalOutput = "0.00";
+
+  // person counter handlers:
   void decrementCounter() {
     setState(() {
       if (personCount > 0) personCount--;
+      debugPrint("Current bill: $totalCost");
+      debugPrint("Current guest count: $personCount");
+      // and as I have the totalCost - which is the same as the text field
+      // value - I can call the same method as the cahne handler on the text box:
+      handleBillAmount(totalCost);
     });
   }
 
   void incrementCounter() {
     setState(() {
       personCount++;
+      debugPrint("Current bill: $totalCost");
+      debugPrint("Current guest count: $personCount");
+      // and as I have the totalCost - which is the same as the text field
+      // value - I can call the same method as the cahne handler on the text box:
+      handleBillAmount(totalCost);
     });
   }
 
@@ -70,37 +86,64 @@ class _UTipState extends State<UTip> {
     // = `value` in example
     setState(() {
       debugPrint("setting to sliderValue of: $sliderValue...");
+
       // I DO need all three vars - the TPP is also the tooltip!
       tipPercentPerPerson = sliderPos = sliderValue;
+
+      debugPrint("Current bill: $totalCost");
+      debugPrint("Current guest count: $personCount");
+
+      // and as I have the totalCost - which is the same as the text field
+      // value - I can call the same method as the cahne handler on the text box:
+      handleBillAmount(totalCost);
     });
   }
 
   // handler for total cost (blur?, on personcounter change?)
   // `value` comes from the input field
-  void handleBillAmount(value) {
+  void handleBillAmount(totalBillAmount) {
     setState(() {
-      if (value is String) {
-        debugPrint("Its a trap!");
+      if (totalBillAmount is String) {
+        debugPrint("Its a trap! $totalBillAmount");
         // This'll need exception handling:
-        value = double.parse(value); // hmm... double vs Double types...
+        totalBillAmount = double.parse(
+          totalBillAmount,
+        ); // hmm... double vs Double types...
       }
-      if (value is double) {
-        debugPrint("Its a sausage! $value");
+      if (totalBillAmount is double) {
+        debugPrint("Its a sausage! $totalBillAmount");
       }
-
+      //See https://flutterdata.dev/articles/checking-null-aware-operators-dart/ re null checking
+      // umm... this threw an exception...
+      // totalBillAmount = double.tryParse(totalBillAmount);
       /**
-       * It's now a float, so we can work out the amount PP. It will probably 
+       * It's now a float, or default of 0, so we can work out the amount PP. It will probably 
        * need to be a Currency type.
        */
-      totalCost = value;
-      debugPrint("Bill amount is \$$totalCost");
-      debugPrint("There are $personCount guests");
-      debugPrint("Tip percentage is $sliderPos");
-      debugPrint("Amount per person: ${value / personCount}");
-      tipPerPerson = (value * (sliderPos / 100)) / personCount;
-      debugPrint("Tip amount per person: $tipPerPerson");
+      if (totalBillAmount != null) {
+        totalCost = totalBillAmount;
+        debugPrint("Bill amount is \$$totalBillAmount");
+        debugPrint("There are $personCount guests");
+        debugPrint("Tip percentage is $sliderPos");
+        if (personCount > 0) {
+          costPerPerson = totalBillAmount / personCount;
+          debugPrint("Amount per person: $costPerPerson");
+          tipPerPerson = (totalBillAmount * (sliderPos / 100)) / personCount;
+          debugPrint("Tip amount per person: $tipPerPerson");
+        } else {
+          debugPrint("No guests!");
+        }
+      } else {
+        tipPerPerson = 0.0;
+      }
 
-      // TODO: trigger change from all widgets.
+      // and format the tip per person as currency:
+      // https://stackoverflow.com/questions/14865568/currency-format-in-dart
+      final formatCurrency = NumberFormat.simpleCurrency(locale: "en_GB");
+      finalOutput = formatCurrency.format(tipPerPerson);
+      finalCostPerPersonOutput = formatCurrency.format(costPerPerson);
+      debugPrint("Tip amount per person: $finalOutput");
+      // TODO: trigger change from all widgets. - DONE
     });
   }
 
@@ -135,7 +178,8 @@ class _UTipState extends State<UTip> {
               children: [
                 Text("Total per person:", style: style),
                 Text(
-                  "\$$tipPerPerson",
+                  // "\$$tipPerPerson",
+                  finalCostPerPersonOutput, // this is a formatted currency string
                   style: style.copyWith(
                     fontSize: theme.textTheme.displaySmall!.fontSize,
                   ),
@@ -179,7 +223,7 @@ class _UTipState extends State<UTip> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text("Tip", style: theme.textTheme.titleMedium),
-                      Text("\$5000}"),
+                      Text(finalOutput), // this is a formatted currency string
                     ],
                   ),
                   // slider text:
