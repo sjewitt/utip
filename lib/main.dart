@@ -4,6 +4,8 @@ import 'package:intl/intl.dart';
 import 'package:utip/widgets/bill_amt_text_field.dart';
 import 'package:utip/widgets/person_counter.dart';
 import 'package:utip/widgets/tip_percent_slider.dart';
+import 'package:utip/widgets/tip_total_amt.dart';
+import 'package:utip/widgets/total_per_person_header.dart';
 
 void main() {
   runApp(const MyApp());
@@ -48,9 +50,7 @@ class _UTipState extends State<UTip> {
   String finalTipPerPersonOutput = "0.00";
   String finalTipTotalOutput = "0.00";
 
-  // // contextual Icon:
-  // var currencyIcon =
-  //     null; // OK this is an example of a dynamic var - I don't want to declare it as an Icon yet.
+  // TODO: https://stackoverflow.com/questions/48836636/how-to-use-functions-of-another-file-in-dart-flutter
 
   // person counter handlers:
   void decrementCounter() {
@@ -81,7 +81,7 @@ class _UTipState extends State<UTip> {
     });
   }
 
-  // course equivalents:
+  // course equivalents, for comparison (add logging to check):
   double totalPerPerson() {
     double _total =
         ((totalCost * (tipPercentPerPerson / 100)) + (totalCost)) /
@@ -126,28 +126,10 @@ class _UTipState extends State<UTip> {
     });
   }
 
-  // // handle contextual currency icon:
-
-  // // see https://stackoverflow.com/questions/58766133/how-to-get-currency-and-currency-symbol-in-flutter-by-country-code
-  // // and https://stackoverflow.com/questions/59854088/how-to-convert-a-flutter-string-to-icon-value
-  // Icon getContextualCurrencySymbol() {
-  //   // setState(() {
-  //   Locale locale = Localizations.localeOf(context);
-  //   var fmt = NumberFormat.simpleCurrency(locale: locale.toString());
-  //   currencyIcon = Icon(IconData(fmt.currencySymbol.codeUnitAt(0)));
-  //   return currencyIcon;
-  //   // });
-  // }
-
-  // Locale locale = Localizations.localeOf(context);
-  // var fmt = NumberFormat.simpleCurrency(locale: locale.toString());
-  // Icon contextualCurrencySymbol = Icon(IconData(fmt.currencySymbol.codeUnitAt(0)));
-
-  // Icon prefixIcon = contextualCurrencySymbol;
-
   @override
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
+    // from course material, for comparison (see console logs):
     double total = totalPerPerson();
     double totalT = totalTip();
 
@@ -164,28 +146,12 @@ class _UTipState extends State<UTip> {
         mainAxisSize: MainAxisSize.max,
 
         children: [
-          Container(
-            decoration: BoxDecoration(
-              color: theme.colorScheme.inversePrimary,
-              border: BoxBorder.all(color: Colors.black45),
-              borderRadius: BorderRadius.all(Radius.circular(5.0)),
-            ),
-
-            margin: EdgeInsets.all(3),
-            padding: EdgeInsets.all(18),
-
-            child: Column(
-              children: [
-                Text("Total per person:", style: style),
-                Text(
-                  finalCostPerPersonOutput, // this is a formatted currency string
-                  style: style.copyWith(
-                    fontSize: theme.textTheme.displaySmall!.fontSize,
-                  ),
-                ),
-              ],
-            ),
+          TotalPerPersonHeader(
+            theme: theme,
+            style: style,
+            finalCostPerPersonOutput: finalCostPerPersonOutput,
           ),
+
           Padding(
             padding: const EdgeInsets.all(3.0),
             child: Container(
@@ -222,15 +188,9 @@ class _UTipState extends State<UTip> {
                     ],
                   ),
 
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        "Total tip amount:",
-                        style: theme.textTheme.titleMedium,
-                      ),
-                      Text(finalTipTotalOutput),
-                    ],
+                  TipTotalAmount(
+                    theme: theme,
+                    finalTipTotalOutput: finalTipTotalOutput,
                   ),
 
                   // Text("Tip: ${tipPercentPerPerson.round()}%"),
