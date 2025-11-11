@@ -48,9 +48,9 @@ class _UTipState extends State<UTip> {
   String finalTipPerPersonOutput = "0.00";
   String finalTipTotalOutput = "0.00";
 
-  // contextual Icon:
-  var currencyIcon =
-      null; // OK this is an example of a dynamic var - I don't want to declare it as an Icon yet.
+  // // contextual Icon:
+  // var currencyIcon =
+  //     null; // OK this is an example of a dynamic var - I don't want to declare it as an Icon yet.
 
   // person counter handlers:
   void decrementCounter() {
@@ -126,18 +126,18 @@ class _UTipState extends State<UTip> {
     });
   }
 
-  // handle contextual currency icon:
+  // // handle contextual currency icon:
 
-  // see https://stackoverflow.com/questions/58766133/how-to-get-currency-and-currency-symbol-in-flutter-by-country-code
-  // and https://stackoverflow.com/questions/59854088/how-to-convert-a-flutter-string-to-icon-value
-  Icon getContextualCurrencySymbol() {
-    // setState(() {
-    Locale locale = Localizations.localeOf(context);
-    var fmt = NumberFormat.simpleCurrency(locale: locale.toString());
-    currencyIcon = Icon(IconData(fmt.currencySymbol.codeUnitAt(0)));
-    return currencyIcon;
-    // });
-  }
+  // // see https://stackoverflow.com/questions/58766133/how-to-get-currency-and-currency-symbol-in-flutter-by-country-code
+  // // and https://stackoverflow.com/questions/59854088/how-to-convert-a-flutter-string-to-icon-value
+  // Icon getContextualCurrencySymbol() {
+  //   // setState(() {
+  //   Locale locale = Localizations.localeOf(context);
+  //   var fmt = NumberFormat.simpleCurrency(locale: locale.toString());
+  //   currencyIcon = Icon(IconData(fmt.currencySymbol.codeUnitAt(0)));
+  //   return currencyIcon;
+  //   // });
+  // }
 
   // Locale locale = Localizations.localeOf(context);
   // var fmt = NumberFormat.simpleCurrency(locale: locale.toString());
